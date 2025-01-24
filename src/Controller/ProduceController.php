@@ -23,8 +23,8 @@ final class ProduceController extends AbstractController
     #[OA\Get(
         summary: 'List produce with optional filters',
         parameters: [
-            new OA\Parameter(name: 'type', in: 'query', schema: new OA\Schema(type: 'string')),
-            new OA\Parameter(name: 'unit', in: 'query', schema: new OA\Schema(type: 'string', enum: ['g', 'kg'])),
+            new OA\Parameter(name: 'type', in: 'query', schema: new OA\Schema(type: 'string',enum: [ProduceType::FRUIT, ProduceType::VEGETABLE])),
+            new OA\Parameter(name: 'unit', in: 'query', schema: new OA\Schema(type: 'string', enum: [UnitType::GRAMM->value, UnitType::KILOGRAMM->value])),
         ]
     )]
     #[Route('/api/v1/produce', name: 'app_list_produce', methods: ['GET'])]
@@ -104,7 +104,7 @@ final class ProduceController extends AbstractController
     #[OA\Get(
         summary: 'Search produce',
         parameters: [
-            new OA\Parameter(name: 'type', in: 'query', schema: new OA\Schema(type: 'string')),
+            new OA\Parameter(name: 'type', in: 'query', schema: new OA\Schema(type: 'string',enum: [ProduceType::FRUIT, ProduceType::VEGETABLE])),
             new OA\Parameter(name: 'name', in: 'query', schema: new OA\Schema(type: 'string')),
         ]
     )]
