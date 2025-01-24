@@ -1,18 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\ProduceTypeRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: ProduceTypeRepository::class)]
 class ProduceType
 {
-
-    public CONST FRUIT = 'fruit';
-    public CONST VEGETABLE = 'vegetable';
+    public const FRUIT     = 'fruit';
+    public const VEGETABLE = 'vegetable';
 
 
     #[ORM\Id]
@@ -20,26 +20,19 @@ class ProduceType
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(['list_produce'])]
     #[ORM\Column(length: 100)]
-    private ?string $name = null;
+    private string $name;
 
     /**
-     * @var Collection<int, Produce>
+     * @return string[]
      */
-    #[ORM\OneToMany(targetEntity: Produce::class, mappedBy: 'type', orphanRemoval: true)]
-    private Collection $produces;
-
     public static function getProduceTypes(): array
     {
         return [
             self::FRUIT     => self::FRUIT,
             self::VEGETABLE => self::VEGETABLE,
         ];
-    }
-
-    public function __construct()
-    {
-        $this->produces = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -55,36 +48,6 @@ class ProduceType
     public function setName(string $name): static
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Produce>
-     */
-    public function getProduces(): Collection
-    {
-        return $this->produces;
-    }
-
-    public function addProduce(Produce $produce): static
-    {
-        if (!$this->produces->contains($produce)) {
-            $this->produces->add($produce);
-            $produce->setType($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProduce(Produce $produce): static
-    {
-        if ($this->produces->removeElement($produce)) {
-            // set the owning side to null (unless already changed)
-            if ($produce->getType() === $this) {
-                $produce->setType(null);
-            }
-        }
 
         return $this;
     }

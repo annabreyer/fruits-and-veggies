@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Service\Helper;
 
@@ -9,6 +11,8 @@ use App\Exception\InvalidProduceDataException;
 class ProduceDataValidator
 {
     /**
+     * @param array <string, mixed> $produceData
+     *
      * @throws InvalidProduceDataException
      * @throws \InvalidArgumentException
      */
@@ -48,13 +52,8 @@ class ProduceDataValidator
             throw new InvalidProduceDataException(MandatoryFieldMissingHelper::message('type'));
         }
 
-        if (false === in_array($type, ProduceType::getProduceTypes())) {
-            throw new InvalidProduceDataException(
-                sprintf('%s is not a valid produce type. Expected types are: %s.',
-                    $type,
-                    implode(', ', ProduceType::getProduceTypes())
-                )
-            );
+        if (false === \in_array($type, ProduceType::getProduceTypes(), true)) {
+            throw new InvalidProduceDataException(\sprintf('%s is not a valid produce type. Expected types are: %s.', $type, implode(', ', ProduceType::getProduceTypes())));
         }
     }
 
@@ -82,12 +81,7 @@ class ProduceDataValidator
         }
 
         if ($unit !== UnitType::KILOGRAMM->value && $unit !== UnitType::GRAMM->value) {
-            throw new InvalidProduceDataException(
-                sprintf('%s is not a valid produce unit. Expected units are %s.',
-                    $unit,
-                    UnitType::KILOGRAMM->value . ', ' . UnitType::GRAMM->value
-                )
-            );
+            throw new InvalidProduceDataException(\sprintf('%s is not a valid produce unit. Expected units are %s.', $unit, UnitType::KILOGRAMM->value . ', ' . UnitType::GRAMM->value));
         }
     }
 }

@@ -1,9 +1,12 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Processor;
 
 use App\Entity\Produce;
 use App\Enum\UnitType;
+use App\Exception\InvalidProduceDataException;
 use App\Repository\ProduceTypeRepository;
 use App\Service\Helper\ProduceDataValidator;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -13,11 +16,16 @@ class ProduceProcessor
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly ProduceTypeRepository $produceTypeRepository
+        private readonly ProduceTypeRepository $produceTypeRepository,
     ) {
 
     }
 
+    /**
+     * @param array <string, mixed> $data
+     *
+     * @throws InvalidProduceDataException
+     */
     public function createProduceFromData(array $data): Produce
     {
         ProduceDataValidator::validateProduceData($data);
@@ -37,7 +45,7 @@ class ProduceProcessor
     {
         $produceType = $this->produceTypeRepository->findOneBy(['name' => $type]);
         if (null === $produceType) {
-            throw new \InvalidArgumentException(sprintf('ProduceType with name %s does not exist.', $type));
+            throw new \InvalidArgumentException(\sprintf('ProduceType with name %s does not exist.', $type));
         }
 
         $produce = new Produce();
@@ -54,6 +62,9 @@ class ProduceProcessor
         return $quantity * 1000;
     }
 
+    /**
+     * @param ArrayCollection <int, Produce> $produces
+     */
     public function saveProduceCollection(ArrayCollection $produces): void
     {
         foreach ($produces as $produce) {

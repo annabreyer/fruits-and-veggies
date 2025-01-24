@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Collection;
 
@@ -14,7 +16,7 @@ class FruitCollection extends ArrayCollection
             throw new \InvalidArgumentException('Element must be an instance of Produce');
         }
 
-        if ($element->getType() !== ProduceType::FRUIT) {
+        if (ProduceType::FRUIT !== $element->getProduceTypeName()) {
             throw new \InvalidArgumentException('Element must be of type ProduceType::FRUIT');
         }
 
@@ -26,6 +28,9 @@ class FruitCollection extends ArrayCollection
         return parent::remove($key);
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public function list(): array
     {
         return parent::toArray();

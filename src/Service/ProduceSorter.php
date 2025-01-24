@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Service;
 
@@ -11,16 +13,27 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 class ProduceSorter
 {
+    /**
+     * @var ArrayCollection <int, Produce>
+     */
     private ArrayCollection $fruits;
+
+    /**
+     * @var ArrayCollection <int, Produce>
+     */
     private ArrayCollection $vegetables;
 
     public function __construct(private readonly ProduceProcessor $produceProcessor)
     {
-        $this->fruits = new ArrayCollection();
+        $this->fruits     = new ArrayCollection();
         $this->vegetables = new ArrayCollection();
     }
 
-    public function processRequest(string $produceJson): void {
+    /**
+     * @throws InvalidProduceDataException
+     */
+    public function processRequest(string $produceJson): void
+    {
         $data = json_decode($produceJson, true);
 
         if (null === $data) {
@@ -36,16 +49,23 @@ class ProduceSorter
         $this->saveProduceCollections();
     }
 
+    /**
+     * @return ArrayCollection <int, Produce>
+     */
     public function getFruits(): ArrayCollection
     {
         return $this->fruits;
     }
 
+    /**
+     * @return ArrayCollection <int, Produce>
+     */
     public function getVegetables(): ArrayCollection
     {
         return $this->vegetables;
     }
-    private function addProduceToCollection(Produce $produce)
+
+    private function addProduceToCollection(Produce $produce): void
     {
         if (ProduceType::FRUIT === $produce->getType()->getName()) {
             $this->fruits->add($produce);

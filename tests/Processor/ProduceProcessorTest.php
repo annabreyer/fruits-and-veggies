@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Processor;
 
 use App\Entity\Produce;
@@ -18,7 +20,7 @@ class ProduceProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->entityManager = $this->createMock(EntityManagerInterface::class);
+        $this->entityManager         = $this->createMock(EntityManagerInterface::class);
         $this->produceTypeRepository = $this->createMock(ProduceTypeRepository::class);
 
         $this->produceProcessor = new ProduceProcessor(
@@ -38,10 +40,10 @@ class ProduceProcessorTest extends TestCase
     public function testCreateProduceFromDataConvertsQuantityToGramsIfUnitIsNotGram(): void
     {
         $data = [
-            'name' => 'apple',
+            'name'     => 'apple',
             'quantity' => 2,
-            'type' => ProduceType::FRUIT,
-            'unit' => UnitType::KILOGRAMM->value,
+            'type'     => ProduceType::FRUIT,
+            'unit'     => UnitType::KILOGRAMM->value,
         ];
 
         $fruitType = new ProduceType();
@@ -53,16 +55,16 @@ class ProduceProcessorTest extends TestCase
         $produce = $this->produceProcessor->createProduceFromData($data);
 
         self::assertInstanceOf(Produce::class, $produce);
-        self::assertEquals(2000, $produce->getWeight());
+        self::assertSame(2000, $produce->getWeight());
     }
 
     public function testCreateProduceFromDataCreatesProduce(): void
     {
         $data = [
-            'name' => 'apple',
+            'name'     => 'apple',
             'quantity' => 2,
-            'type' => ProduceType::FRUIT,
-            'unit' => UnitType::GRAMM->value,
+            'type'     => ProduceType::FRUIT,
+            'unit'     => UnitType::GRAMM->value,
         ];
 
         $fruitType = new ProduceType();
@@ -74,8 +76,8 @@ class ProduceProcessorTest extends TestCase
         $produce = $this->produceProcessor->createProduceFromData($data);
 
         self::assertInstanceOf(Produce::class, $produce);
-        self::assertEquals($data['quantity'], $produce->getWeight());
-        self::assertEquals($data['name'], $produce->getName());
+        self::assertSame($data['quantity'], $produce->getWeight());
+        self::assertSame($data['name'], $produce->getName());
     }
 
     public function testCreateProduceThrowsExceptionOfTypeDoesNotExistIndatabase(): void
@@ -86,5 +88,4 @@ class ProduceProcessorTest extends TestCase
 
         $this->produceProcessor->createProduce('Steak', 250, 'meat');
     }
-
 }

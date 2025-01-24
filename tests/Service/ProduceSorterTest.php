@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Tests\Service;
 
@@ -18,55 +20,55 @@ class ProduceSorterTest extends TestCase
     protected function setUp(): void
     {
         $this->produceProcessor = $this->createMock(ProduceProcessor::class);
-        $this->produceSorter = new ProduceSorter($this->produceProcessor);
+        $this->produceSorter    = new ProduceSorter($this->produceProcessor);
     }
 
     public function testProcessRequestWithSingleFruit(): void
     {
-        $json = '[{"name":"Apple","type":"fruit", "quantity": 10, "unit": "kg"}]';
-        $produceData = ['name' => 'Apple', 'type' => 'fruit', "quantity" => 10, "unit" => "kg"];
+        $json        = '[{"name":"Apple","type":"fruit", "quantity": 10, "unit": "kg"}]';
+        $produceData = ['name' => 'Apple', 'type' => 'fruit', 'quantity' => 10, 'unit' => 'kg'];
 
         $produce = new Produce();
         $produce->setType((new ProduceType())->setName(ProduceType::FRUIT));
 
         $this->produceProcessor
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('createProduceFromData')
             ->with($produceData)
             ->willReturn($produce);
 
         $this->produceProcessor
-            ->expects($this->exactly(2))
+            ->expects(self::exactly(2))
             ->method('saveProduceCollection');
 
         $this->produceSorter->processRequest($json);
 
-        $this->assertCount(1, $this->produceSorter->getFruits());
-        $this->assertCount(0, $this->produceSorter->getVegetables());
+        self::assertCount(1, $this->produceSorter->getFruits());
+        self::assertCount(0, $this->produceSorter->getVegetables());
     }
 
     public function testProcessRequestWithSingleVegetable(): void
     {
-        $json = '[{"name":"Carrot","type":"vegetable","quantity": 3, "unit": "kg"}]';
-        $produceData = ['name' => 'Carrot', 'type' => 'vegetable', "quantity" => 3, "unit" => "kg"];
+        $json        = '[{"name":"Carrot","type":"vegetable","quantity": 3, "unit": "kg"}]';
+        $produceData = ['name' => 'Carrot', 'type' => 'vegetable', 'quantity' => 3, 'unit' => 'kg'];
 
         $produce = new Produce();
         $produce->setType((new ProduceType())->setName(ProduceType::VEGETABLE));
 
         $this->produceProcessor
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('createProduceFromData')
             ->with($produceData)
             ->willReturn($produce);
 
         $this->produceProcessor
-            ->expects($this->exactly(2))
+            ->expects(self::exactly(2))
             ->method('saveProduceCollection');
 
         $this->produceSorter->processRequest($json);
 
-        $this->assertCount(0, $this->produceSorter->getFruits());
-        $this->assertCount(1, $this->produceSorter->getVegetables());
+        self::assertCount(0, $this->produceSorter->getFruits());
+        self::assertCount(1, $this->produceSorter->getVegetables());
     }
 
     public function testProcessRequestWithMixedProduce(): void
@@ -83,18 +85,18 @@ class ProduceSorterTest extends TestCase
         $vegetable->setType((new ProduceType())->setName(ProduceType::VEGETABLE));
 
         $this->produceProcessor
-            ->expects($this->exactly(2))
+            ->expects(self::exactly(2))
             ->method('createProduceFromData')
             ->willReturnOnConsecutiveCalls($fruit, $vegetable);
 
         $this->produceProcessor
-            ->expects($this->exactly(2))
+            ->expects(self::exactly(2))
             ->method('saveProduceCollection');
 
         $this->produceSorter->processRequest($json);
 
-        $this->assertCount(1, $this->produceSorter->getFruits());
-        $this->assertCount(1, $this->produceSorter->getVegetables());
+        self::assertCount(1, $this->produceSorter->getFruits());
+        self::assertCount(1, $this->produceSorter->getVegetables());
     }
 
     public function testProcessRequestWithInvalidJson(): void

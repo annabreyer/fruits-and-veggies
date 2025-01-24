@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Tests\Service\Helper;
 
@@ -26,8 +28,8 @@ class ProduceDataValidatorTest extends TestCase
 
         ProduceDataValidator::validateProduceData([
             'quantity' => 10,
-            'type' => 'fruit',
-            'unit' => 'kg'
+            'type'     => 'fruit',
+            'unit'     => 'kg',
         ]);
     }
 
@@ -39,7 +41,7 @@ class ProduceDataValidatorTest extends TestCase
         ProduceDataValidator::validateProduceData([
             'name' => 'apple',
             'type' => 'fruit',
-            'unit' => 'kg'
+            'unit' => 'kg',
         ]);
     }
 
@@ -49,9 +51,9 @@ class ProduceDataValidatorTest extends TestCase
         self::expectExceptionMessage(MandatoryFieldMissingHelper::message('type'));
 
         ProduceDataValidator::validateProduceData([
-            'name' => 'apple',
+            'name'     => 'apple',
             'quantity' => 10,
-            'unit' => 'kg'
+            'unit'     => 'kg',
         ]);
     }
 
@@ -61,9 +63,9 @@ class ProduceDataValidatorTest extends TestCase
         self::expectExceptionMessage(MandatoryFieldMissingHelper::message('unit'));
 
         ProduceDataValidator::validateProduceData([
-            'name' => 'apple',
+            'name'     => 'apple',
             'quantity' => 10,
-            'type' => 'fruit'
+            'type'     => 'fruit',
         ]);
     }
 
@@ -72,10 +74,10 @@ class ProduceDataValidatorTest extends TestCase
         self::expectNotToPerformAssertions();
 
         ProduceDataValidator::validateProduceData([
-            'name' => 'apple',
+            'name'     => 'apple',
             'quantity' => 10,
-            'type' => 'fruit',
-            'unit' => 'kg'
+            'type'     => 'fruit',
+            'unit'     => 'kg',
         ]);
     }
 
@@ -90,7 +92,7 @@ class ProduceDataValidatorTest extends TestCase
     public function testValidateProduceTypeThrowsExceptionForInvalidType(): void
     {
         $this->expectException(InvalidProduceDataException::class);
-        $this->expectExceptionMessage('invalid_type is not a valid produce type. Expected types are: '. ProduceType::FRUIT . ', ' . ProduceType::VEGETABLE);
+        $this->expectExceptionMessage('invalid_type is not a valid produce type. Expected types are: ' . ProduceType::FRUIT . ', ' . ProduceType::VEGETABLE);
 
         ProduceDataValidator::validateProduceType('invalid_type');
     }
