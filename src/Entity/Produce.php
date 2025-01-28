@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\ProduceRepository;
+use App\Service\Helper\QuantityConversionHelper;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Serializer\Attribute\SerializedName;
@@ -25,7 +26,6 @@ class Produce
     #[ORM\Column]
     private int $weight;
 
-    #[ORM\ManyToOne(inversedBy: 'produces')]
     #[ORM\JoinColumn(nullable: false)]
     private ProduceType $type;
 
@@ -83,6 +83,6 @@ class Produce
     #[Groups(['list_produce_kg'])]
     public function getWeightInKg(): float
     {
-        return round($this->weight / 1000);
+        return QuantityConversionHelper::convertGramToKilogramm($this->weight);
     }
 }

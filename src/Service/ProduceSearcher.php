@@ -29,23 +29,18 @@ class ProduceSearcher
             return [];
         }
 
+        $name = null;
+        $type = null;
+
         if (\array_key_exists('type', $query)) {
             ProduceDataValidator::validateProduceType($query['type']);
+            $type = $query['type'];
         }
 
-        $produce = $this->produceRepository->findAll();
+        if (\array_key_exists('name', $query)) {
+            $name = $query['name'];
+        }
 
-        return array_filter($produce, static function (Produce $produce) use ($query) {
-            $searchLower = strtolower($query['name']);
-            $nameLower   = strtolower($produce->getName());
-            $typeLower   = strtolower($produce->getProduceTypeName());
-
-            $nameWords   = explode(' ', $nameLower);
-            $typeWords   = explode(' ', $typeLower);
-            $searchWords = explode(' ', $searchLower);
-
-            return \count(array_intersect($nameWords, $searchWords)) > 0
-                || \count(array_intersect($typeWords, $searchWords)) > 0;
-        });
+        return $this->produceRepository->searchProduce($name, $type);
     }
 }

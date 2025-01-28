@@ -27,9 +27,33 @@ class ProduceRepository extends ServiceEntityRepository
     public function getProduceFilteredByType(array $produceTypeNames): array
     {
         return $this->createQueryBuilder('p')
-                     ->innerJoin(ProduceType::class, 'pt', 'WITH', 'p.type = pt.id')
+                     ->innerJoin(ProduceType::class, 'pt')
                      ->andWhere('pt.name IN (:produceType)')
                      ->setParameter('produceType', $produceTypeNames)
                      ->getQuery()->getResult();
+    }
+
+    /**
+     * @return array <int, Produce>
+     */
+    public function searchProduce(?string $name, string|ProduceType|null $type): array
+    {
+        $qb = $this->createQueryBuilder('p')
+                   ->innerJoin(ProduceType::class, 'pt');
+
+        if (false === empty($name)) {
+            $qb->andWhere('p.name LIKE :name')
+               ->setParameter('name', '%' . $name . '%');
+        }
+
+        if (null !== $type) {
+            if ($type instanceof ProduceType) {
+                $type = $type->getName();
+            }
+            $qb->andWhere('pt.name = :type')
+               ->setParameter('type', $type);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 }

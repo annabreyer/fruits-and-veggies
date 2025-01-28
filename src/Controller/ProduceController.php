@@ -23,7 +23,7 @@ final class ProduceController extends AbstractController
     #[OA\Get(
         summary: 'List produce with optional filters',
         parameters: [
-            new OA\Parameter(name: 'type', in: 'query', schema: new OA\Schema(type: 'string',enum: [ProduceType::FRUIT, ProduceType::VEGETABLE])),
+            new OA\Parameter(name: 'type', in: 'query', schema: new OA\Schema(type: 'string', enum: [ProduceType::FRUIT, ProduceType::VEGETABLE])),
             new OA\Parameter(name: 'unit', in: 'query', schema: new OA\Schema(type: 'string', enum: [UnitType::GRAMM->value, UnitType::KILOGRAMM->value])),
         ]
     )]
@@ -56,9 +56,9 @@ final class ProduceController extends AbstractController
             }
         }
 
-        $types   = empty($query['type']) ? ProduceType::getProduceTypes() : [$query['type']];
+        $types   = empty($query['type']) ? ProduceType::PRODUCE_TYPES : [$query['type']];
         $produce = $produceRepository->getProduceFilteredByType($types);
-        if ($query['unit'] === UnitType::GRAMM->value) {
+        if (UnitType::GRAMM->value === $query['unit']) {
             return $this->json($produce, Response::HTTP_OK, [], [
                 'groups' => ['list_produce'],
             ]);
@@ -75,9 +75,8 @@ final class ProduceController extends AbstractController
             schema: new OA\Schema(
                 type: 'array',
                 items: new OA\Items(
-                    required: ['id', 'name', 'type', 'quantity', 'unit'],
+                    required: ['name', 'type', 'quantity', 'unit'],
                     properties: [
-                        new OA\Property(property: 'id', type: 'integer', example: 1),
                         new OA\Property(property: 'name', type: 'string', example: 'Carrot'),
                         new OA\Property(property: 'type', type: 'string', example: 'vegetable'),
                         new OA\Property(property: 'quantity', type: 'number', example: 10922),
@@ -104,7 +103,7 @@ final class ProduceController extends AbstractController
     #[OA\Get(
         summary: 'Search produce',
         parameters: [
-            new OA\Parameter(name: 'type', in: 'query', schema: new OA\Schema(type: 'string',enum: [ProduceType::FRUIT, ProduceType::VEGETABLE])),
+            new OA\Parameter(name: 'type', in: 'query', schema: new OA\Schema(type: 'string', enum: [ProduceType::FRUIT, ProduceType::VEGETABLE])),
             new OA\Parameter(name: 'name', in: 'query', schema: new OA\Schema(type: 'string')),
         ]
     )]

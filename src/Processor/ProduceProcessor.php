@@ -9,6 +9,7 @@ use App\Enum\UnitType;
 use App\Exception\InvalidProduceDataException;
 use App\Repository\ProduceTypeRepository;
 use App\Service\Helper\ProduceDataValidator;
+use App\Service\Helper\QuantityConversionHelper;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -32,8 +33,8 @@ class ProduceProcessor
 
         $weightInGrams = $data['quantity'];
 
-        if (UnitType::GRAMM->value !== $data['unit'] && UnitType::KILOGRAMM->value === $data['unit']) {
-            $weightInGrams = $this->convertKilogrammToGram($data['quantity']);
+        if (UnitType::KILOGRAMM->value === $data['unit']) {
+            $weightInGrams = QuantityConversionHelper::convertKilogrammToGram($data['quantity']);
         }
 
         $produce = $this->createProduce($data['name'], $weightInGrams, $data['type']);
@@ -55,11 +56,6 @@ class ProduceProcessor
         ;
 
         return $produce;
-    }
-
-    public function convertKilogrammToGram(int $quantity): int
-    {
-        return $quantity * 1000;
     }
 
     /**

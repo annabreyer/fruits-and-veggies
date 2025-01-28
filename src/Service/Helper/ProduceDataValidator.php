@@ -52,8 +52,8 @@ class ProduceDataValidator
             throw new InvalidProduceDataException(MandatoryFieldMissingHelper::message('type'));
         }
 
-        if (false === \in_array($type, ProduceType::getProduceTypes(), true)) {
-            throw new InvalidProduceDataException(\sprintf('%s is not a valid produce type. Expected types are: %s.', $type, implode(', ', ProduceType::getProduceTypes())));
+        if (false === \in_array($type, ProduceType::PRODUCE_TYPES, true)) {
+            throw new InvalidProduceDataException(\sprintf('%s is not a valid produce type. Expected types are: %s.', $type, implode(', ', ProduceType::PRODUCE_TYPES)));
         }
     }
 

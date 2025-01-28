@@ -8,11 +8,14 @@ use App\Entity\Produce;
 use App\Entity\ProduceType;
 use Doctrine\Common\Collections\ArrayCollection;
 
+/**
+ * @extends ArrayCollection<int, Produce>
+ */
 class VegetableCollection extends ArrayCollection
 {
     public function add(mixed $element)
     {
-        if (!$element instanceof Produce) {
+        if (false === $element instanceof Produce) {
             throw new \InvalidArgumentException('Element must be an instance of Produce');
         }
 
