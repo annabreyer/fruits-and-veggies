@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Collection\FruitCollection;
+use App\Collection\VegetableCollection;
 use App\Entity\Produce;
 use App\Entity\ProduceType;
 use App\Exception\InvalidProduceDataException;
@@ -14,19 +16,19 @@ use Doctrine\Common\Collections\ArrayCollection;
 class ProduceSorter
 {
     /**
-     * @var ArrayCollection <int, Produce>
+     * @var FruitCollection
      */
-    private ArrayCollection $fruits;
+    private FruitCollection $fruits;
 
     /**
-     * @var ArrayCollection <int, Produce>
+     * @var VegetableCollection
      */
-    private ArrayCollection $vegetables;
+    private VegetableCollection $vegetables;
 
     public function __construct(private readonly ProduceProcessor $produceProcessor)
     {
-        $this->fruits     = new ArrayCollection();
-        $this->vegetables = new ArrayCollection();
+        $this->fruits     = new FruitCollection();
+        $this->vegetables = new VegetableCollection();
     }
 
     /**

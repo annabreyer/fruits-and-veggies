@@ -118,7 +118,7 @@ final class ProduceController extends AbstractController
             return $this->json(['message' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 
-        return $this->json($produce, 200, [], [
+        return $this->json($produce, Response::HTTP_OK, [], [
             'groups' => ['list_produce'],
         ]);
     }

@@ -80,9 +80,8 @@ class ProduceProcessorTest extends TestCase
         self::assertSame($data['name'], $produce->getName());
     }
 
-    public function testCreateProduceThrowsExceptionOfTypeDoesNotExistIndatabase(): void
+    public function testCreateProduceThrowsExceptionOfTypeDoesNotExistInDatabase(): void
     {
-
         self::expectException(\InvalidArgumentException::class);
         self::expectExceptionMessage('ProduceType with name meat does not exist.');
 

@@ -26,6 +26,7 @@ class Produce
     #[ORM\Column]
     private int $weight;
 
+    #[ORM\ManyToOne(targetEntity: ProduceType::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ProduceType $type;
 
